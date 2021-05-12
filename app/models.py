@@ -16,12 +16,12 @@ key = app.config['DB_ENCRYPTION_KEY']
 
 def aes_encrypt(data):
   cipher = AES.new(key, AES.MODE_CFB, key[::-1])
-  return cipher.encrypt(data)
+  return cipher.encrypt(data).decode()
 
 def aes_encrypt_old(data):
   cipher = AES.new(key)
   data = data + (" " * (16 - (len(data) % 16)))
-  return binascii.hexlify(cipher.encrypt(data))
+  return binascii.hexlify(cipher.encrypt(data).decode())
 
 def aes_decrypt(data):
   # From a new object
@@ -30,7 +30,7 @@ def aes_decrypt(data):
 
   cipher = AES.new(key, AES.MODE_CFB, key[::-1])
 
-  decrypted = cipher.decrypt(data)
+  decrypted = cipher.decrypt(data.encode())
 
   try:
     return decrypted.decode('utf-8')
@@ -41,7 +41,7 @@ def aes_decrypt(data):
 def aes_decrypt_old(data):
   try:
     cipher = AES.new(key)
-    return cipher.decrypt(binascii.unhexlify(data)).rstrip().decode('ascii')
+    return cipher.decrypt(binascii.unhexlify(data).encode()).rstrip().decode('ascii')
   except:
     # If data is not encrypted, just return it
     return data
