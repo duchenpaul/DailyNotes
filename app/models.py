@@ -9,6 +9,8 @@ import binascii
 import uuid
 import frontmatter
 import re
+import base64
+
 
 
 key = app.config['DB_ENCRYPTION_KEY']
@@ -16,7 +18,9 @@ key = app.config['DB_ENCRYPTION_KEY']
 
 def aes_encrypt(data):
   cipher = AES.new(key, AES.MODE_CFB, key[::-1])
-  return cipher.encrypt(data).decode()
+  # 1. Encode data to binary 2. Encrypt 3. Encode to base64, 
+  # so the encypted data becomes a string
+  return base64.b64encode(cipher.encrypt(data.encode())).decode()
 
 def aes_encrypt_old(data):
   cipher = AES.new(key)
@@ -30,10 +34,10 @@ def aes_decrypt(data):
 
   cipher = AES.new(key, AES.MODE_CFB, key[::-1])
 
-  decrypted = cipher.decrypt(data.encode('utf-8').strip())
+  decrypted = cipher.decrypt(base64.b64decode(data))
 
   try:
-    return decrypted.decode('utf-8')
+    return decrypted
   except:
     # Data is in old encryption or it is unencrypted
     return aes_decrypt_old(data)
