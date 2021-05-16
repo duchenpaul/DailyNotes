@@ -5,8 +5,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/latest-stable/main" > /etc/apk/repositories && \
-    echo "https://mirror.tuna.tsinghua.edu.cn/alpine/latest-stable/community" >> /etc/apk/repositories && \
+RUN echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/main" > /etc/apk/repositories && \
+    echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/community" >> /etc/apk/repositories && \
     apk update
 
 RUN apk add build-base libffi-dev postgresql-dev
