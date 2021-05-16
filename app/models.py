@@ -187,7 +187,7 @@ def after_change_note(mapper, connection, target):
       projects.remove(project.name)
 
   for project in projects:
-    logging.info(aes_encrypt(project))
+    logging.error(aes_encrypt(project))
     connection.execute(
       'INSERT INTO meta (uuid, user_id, note_id, name, kind) VALUES (?, ?, ?, ?, ?)',
       '{}'.format(uuid.uuid4()).replace('-', ''),
