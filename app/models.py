@@ -22,34 +22,14 @@ def aes_encrypt(data):
   # so the encypted data becomes a string
   return base64.b64encode(cipher.encrypt(data.encode())).decode()
 
-def aes_encrypt_old(data):
-  cipher = AES.new(key)
-  data = data + (" " * (16 - (len(data) % 16)))
-  return binascii.hexlify(cipher.encrypt(data).decode())
-
 def aes_decrypt(data):
   # From a new object
   if type(data) is InstrumentedAttribute:
     return ''
 
   cipher = AES.new(key, AES.MODE_CFB, key[::-1])
-
   decrypted = cipher.decrypt(base64.b64decode(data)).decode()
-
-  try:
-    return decrypted
-  except:
-    # Data is in old encryption or it is unencrypted
-    return aes_decrypt_old(data)
-
-def aes_decrypt_old(data):
-  try:
-    cipher = AES.new(key)
-    return cipher.decrypt(binascii.unhexlify(data).encode('utf-8').strip()).rstrip().decode('ascii')
-  except:
-    # If data is not encrypted, just return it
-    return data
-
+  return decrypted
 
 class User(db.Model):
   uuid = db.Column(GUID, primary_key=True, index=True, unique=True, default=lambda: uuid.uuid4())

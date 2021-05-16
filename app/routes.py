@@ -1,5 +1,5 @@
 from app import app, db, argon2
-from app.models import User, Note, Meta, aes_encrypt, aes_encrypt_old
+from app.models import User, Note, Meta, aes_encrypt
 from flask import render_template, request, jsonify, abort
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 
@@ -70,10 +70,6 @@ def save_day():
   enc_date = aes_encrypt(title)
   note = user.notes.filter_by(title=enc_date).first()
 
-  if not Note:
-    # Check old encryption
-    enc_date = aes_encrypt_old(title)
-    note = user.notes.filter_by(title=enc_date).first()
   if not note:
     note = Note(user_id=user.uuid, name=title, text=data, is_date=True)
   else:
@@ -266,11 +262,6 @@ def get_date():
 
   date_enc = aes_encrypt(date)
   note = user.notes.filter_by(title=date_enc, is_date=True).first()
-
-  if not note:
-    # Check old encryption
-    date_enc = aes_encrypt_old(date)
-    note = user.notes.filter_by(title=date_enc, is_date=True).first()
 
   if note:
     ret_note = note.serialize
