@@ -28,7 +28,7 @@ def aes_decrypt(data):
     return ''
 
   cipher = AES.new(key, AES.MODE_CFB, key[::-1])
-  decrypted = cipher.decrypt(base64.b64decode(data)).decode()
+  decrypted = cipher.decrypt(base64.b64decode(data.encode())).decode()
   return decrypted
 
 class User(db.Model):
