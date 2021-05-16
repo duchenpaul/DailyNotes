@@ -15,27 +15,24 @@ RUN echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/main" > /etc/apk/repo
 RUN apk add build-base libffi-dev postgresql-dev
 
 COPY requirements.txt .
-COPY run.sh .
-COPY verify_env.py .
-COPY verify_data_migrations.py .
 
 RUN \
   cd /app && \
   pip install gunicorn && \
-  pip install -r requirements.txt && \
-  chmod +x run.sh && \
-  chmod +x verify_env.py && \
-  chmod +x verify_data_migrations.py
+  pip install -r requirements.txt
 
-RUN mkdir -p /app/client
-COPY client/ /app
+COPY . .
+
 RUN \
   cd /app/client && \
   npm install node-sass && \
   npm ci && \
   npm run build
 
-COPY . .
+RUN \
+  chmod +x /app/run.sh && \
+  chmod +x /app/verify_env.py && \
+  chmod +x /app/verify_data_migrations.py
 
 EXPOSE 5000
 ENTRYPOINT "./run.sh"
