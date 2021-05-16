@@ -14,7 +14,6 @@ RUN echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/main" > /etc/apk/repo
 
 RUN apk add build-base libffi-dev postgresql-dev
 
-COPY client/ /app
 COPY requirements.txt .
 COPY run.sh .
 COPY verify_env.py .
@@ -28,6 +27,8 @@ RUN \
   chmod +x verify_env.py && \
   chmod +x verify_data_migrations.py
 
+RUN mkdir -p /app/client
+COPY client/* /app/client
 RUN \
   cd /app/client && \
   npm install node-sass && \
