@@ -13,7 +13,7 @@ import base64
 
 
 
-key = app.config['DB_ENCRYPTION_KEY']
+key = app.config['DB_ENCRYPTION_KEY'].encode()
 
 
 def aes_encrypt(data):
