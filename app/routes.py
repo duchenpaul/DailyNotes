@@ -76,7 +76,16 @@ def save_day():
   else:
     note.text = data
 
+  logging.error("note is:")
   logging.error(note)
+  logging.error(note.uuid)
+  logging.error(note.user_id)
+  logging.error(note.data)
+  logging.error(note.title)
+  logging.error(note.date)
+  logging.error(note.is_date)
+  logging.error(note.meta)
+
   db.session.add(note)
   db.session.flush()
   db.session.commit()
