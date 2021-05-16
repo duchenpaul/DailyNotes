@@ -14,7 +14,11 @@ RUN echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/main" > /etc/apk/repo
 
 RUN apk add build-base libffi-dev postgresql-dev
 
-COPY . .
+WORKDIR /app/app
+COPY requirements.txt .
+COPY run.sh .
+COPY verify_env.py .
+COPY verify_data_migrations.py .
 
 RUN \
   cd /app && \
@@ -23,6 +27,8 @@ RUN \
   chmod +x run.sh && \
   chmod +x verify_env.py && \
   chmod +x verify_data_migrations.py
+
+COPY . .
 
 RUN \
   cd /app/client && \
