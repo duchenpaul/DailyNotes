@@ -30,7 +30,7 @@ def aes_decrypt(data):
 
   cipher = AES.new(key, AES.MODE_CFB, key[::-1])
 
-  decrypted = cipher.decrypt(data.encode())
+  decrypted = cipher.decrypt(data.encode('utf-8').strip())
 
   try:
     return decrypted.decode('utf-8')
@@ -41,7 +41,7 @@ def aes_decrypt(data):
 def aes_decrypt_old(data):
   try:
     cipher = AES.new(key)
-    return cipher.decrypt(binascii.unhexlify(data).encode()).rstrip().decode('ascii')
+    return cipher.decrypt(binascii.unhexlify(data).encode('utf-8').strip()).rstrip().decode('ascii')
   except:
     # If data is not encrypted, just return it
     return data
