@@ -3,13 +3,18 @@ FROM nikolaik/python-nodejs:python3.8-nodejs12-alpine
 RUN mkdir /app
 WORKDIR /app
 
-COPY . .
+RUN \
+  npm config set registry http://registry.npm.taobao.org && \
+  npm config set proxy http://192.168.2.211:7890  && \
+  npm install node-sass
 
 RUN echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/main" > /etc/apk/repositories && \
     echo "https://mirrors.ustc.edu.cn/alpine/latest-stable/community" >> /etc/apk/repositories && \
     apk update
 
 RUN apk add build-base libffi-dev postgresql-dev
+
+COPY . .
 
 RUN \
   cd /app && \
@@ -21,9 +26,6 @@ RUN \
 
 RUN \
   cd /app/client && \
-  npm config set registry http://registry.npm.taobao.org && \
-  npm config set proxy http://192.168.2.211:7890  && \
-  npm install node-sass && \
   npm ci && \
   npm run build
 
