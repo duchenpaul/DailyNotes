@@ -150,6 +150,7 @@ def after_change_note(mapper, connection, target):
 
   metas = Meta.query.filter_by(note_id=target.uuid).all()
 
+  logging.error("Append meta")
   for meta in metas:
     if meta.kind == 'tag':
       existing_tags.append(meta)
@@ -158,6 +159,7 @@ def after_change_note(mapper, connection, target):
     elif meta.kind == 'task':
       existing_tasks.append(meta)
 
+  logging.error("Delete tag")
   for tag in existing_tags:
     if tag.name not in tags:
       connection.execute(
@@ -167,6 +169,7 @@ def after_change_note(mapper, connection, target):
     else:
       tags.remove(tag.name)
 
+  logging.error("Append tag")
   for tag in tags:
     connection.execute(
       'INSERT INTO meta (uuid, user_id, note_id, name, kind) VALUES (?, ?, ?, ?, ?)',
@@ -177,6 +180,7 @@ def after_change_note(mapper, connection, target):
       'tag'
     )
 
+  logging.error("Del proj")
   for project in existing_projects:
     if project.name not in projects:
       connection.execute(
@@ -186,8 +190,8 @@ def after_change_note(mapper, connection, target):
     else:
       projects.remove(project.name)
 
+  logging.error("Append proj")
   for project in projects:
-    logging.error(aes_encrypt(project))
     connection.execute(
       'INSERT INTO meta (uuid, user_id, note_id, name, kind) VALUES (?, ?, ?, ?, ?)',
       '{}'.format(uuid.uuid4()).replace('-', ''),
@@ -197,6 +201,7 @@ def after_change_note(mapper, connection, target):
       'project'
     )
 
+  logging.error("Del task")
   for task in existing_tasks:
     if task.name not in tasks:
       connection.execute(
@@ -206,6 +211,7 @@ def after_change_note(mapper, connection, target):
     else:
       tasks.remove(task.name)
 
+  logging.error("Append task")
   for task in tasks:
     encrypted_task = aes_encrypt(task)
 
