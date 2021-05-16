@@ -28,7 +28,7 @@ RUN \
   chmod +x verify_data_migrations.py
 
 RUN mkdir -p /app/client
-COPY client/* /app/client
+COPY client/ /app
 RUN \
   cd /app/client && \
   npm install node-sass && \
