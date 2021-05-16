@@ -34,7 +34,7 @@ def aes_decrypt(data):
 
   cipher = AES.new(key, AES.MODE_CFB, key[::-1])
 
-  decrypted = cipher.decrypt(base64.b64decode(data))
+  decrypted = cipher.decrypt(base64.b64decode(data)).decode()
 
   try:
     return decrypted
