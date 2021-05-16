@@ -3,6 +3,7 @@ from app.models import User, Note, Meta, aes_encrypt
 from flask import render_template, request, jsonify, abort
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 
+import logging
 
 @app.route('/api/sign-up', methods=['POST'])
 def sign_up():
@@ -75,6 +76,7 @@ def save_day():
   else:
     note.text = data
 
+  logging.info(note)
   db.session.add(note)
   db.session.flush()
   db.session.commit()
